@@ -1,0 +1,16 @@
+Gorilla Drive - be a Gorilla Tag gorilla in The Long Drive
+
+Needs your own copies of The Long Drive and Gorilla Tag. Nothing from either game is
+included: the gorilla's body, hands and fur are read from your Gorilla Tag folder each
+time the game starts.
+
+Included third-party software:
+- BepInEx 5.4.23.2 (BepInEx team) - MIT - licenses/BepInEx-LICENSE.txt
+- UnityDoorstop 4.3.0, winhttp.dll (NeighTools) - LGPL-2.1 - licenses/UnityDoorstop-LICENSE.txt
+  Source: https://github.com/NeighTools/UnityDoorstop
+- AssetsTools.NET 3.0.5 (nesrak1) - MIT - licenses/AssetsTools.NET-LICENSE.txt
+- classdata.tpk from UABEA (nesrak1) - MIT - licenses/UABEA-classdata-LICENSE.txt
+
+Movement rules follow Another Axiom's open-source GorillaLocomotion (MIT).
+The Long Drive is by Gabor Pinter; Gorilla Tag is by Another Axiom. This mod is
+not affiliated with or endorsed by either.

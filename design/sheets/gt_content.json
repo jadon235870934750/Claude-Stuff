@@ -1,0 +1,61 @@
+{
+  "sheet": "gt_content",
+  "about": "Gorilla Tag content read at runtime from the player's own Gorilla Tag folder. Nothing here is shipped; each row is located by the reader and rebuilt as a Unity object inside The Long Drive.",
+  "columns": ["id", "unity_class", "match_rule", "used_for", "fallback_if_missing", "code_struct", "verified"],
+  "rows": [
+    {
+      "id": "gorilla_skin",
+      "unity_class": "SkinnedMeshRenderer",
+      "match_rule": "GameObject name contains 'gorilla' (case-insensitive) and mesh has >= 1 bone whose name contains 'hand'; prefer the one with most vertices",
+      "used_for": "source of the body mesh, its bones (names + parents) and its material's main texture",
+      "fallback_if_missing": "log 'GorillaDrive: gorilla rig not found' and keep the vanilla player (mod idles)",
+      "code_struct": "GtRig",
+      "verified": "unverified: needs a Gorilla Tag install to confirm the match picks the player gorilla"
+    },
+    {
+      "id": "gorilla_mesh",
+      "unity_class": "Mesh",
+      "match_rule": "the m_Mesh PPtr of gorilla_skin",
+      "used_for": "vertices, normals, uv0, triangles, bone weights, bind poses",
+      "fallback_if_missing": "same as gorilla_skin",
+      "code_struct": "GtMeshData",
+      "verified": "unverified: vertex channel formats decoded per Unity 2019+ layout; compressed meshes not supported"
+    },
+    {
+      "id": "gorilla_fur",
+      "unity_class": "Texture2D",
+      "match_rule": "first Material of gorilla_skin -> m_SavedProperties texture '_MainTex' or '_BaseMap'",
+      "used_for": "fur texture on body and hands",
+      "fallback_if_missing": "flat brown material (#5a3a22) so the gorilla still shows",
+      "code_struct": "GtTexture",
+      "verified": "unverified: supports RGBA32/ARGB32/RGB24/DXT1/DXT5/BC7 raw upload only"
+    },
+    {
+      "id": "left_hand_part",
+      "unity_class": "Mesh (derived)",
+      "match_rule": "triangles whose vertices' dominant bone is the bone matching /hand.*(\\.l|_l|left)/i or one of its descendants",
+      "used_for": "first-person left hand, posed in that bone's bind-pose space",
+      "fallback_if_missing": "hand drawn as a 0.12 m fur-textured sphere",
+      "code_struct": "GtPart",
+      "verified": "unverified: bone naming in Gorilla Tag rig"
+    },
+    {
+      "id": "right_hand_part",
+      "unity_class": "Mesh (derived)",
+      "match_rule": "as left_hand_part with /hand.*(\\.r|_r|right)/i",
+      "used_for": "first-person right hand",
+      "fallback_if_missing": "hand drawn as a 0.12 m fur-textured sphere",
+      "code_struct": "GtPart",
+      "verified": "unverified: bone naming in Gorilla Tag rig"
+    },
+    {
+      "id": "body_part",
+      "unity_class": "Mesh (derived)",
+      "match_rule": "all remaining triangles, bind pose (root space)",
+      "used_for": "gorilla body: shadow-only in first person, fully visible in third-person view",
+      "fallback_if_missing": "no body shadow",
+      "code_struct": "GtPart",
+      "verified": "unverified"
+    }
+  ]
+}

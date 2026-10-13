@@ -1,0 +1,12 @@
+{
+  "sheet": "controls",
+  "about": "Desktop mapping of Gorilla Tag's VR arms. Each row becomes one ControlBinding and one BepInEx config entry.",
+  "columns": ["id", "default_key", "action", "when_active", "verified"],
+  "rows": [
+    {"id": "toggle_gorilla", "default_key": "G", "action": "switch between gorilla movement and The Long Drive's normal walking", "when_active": "on foot", "verified": "unverified in game: G must not clash with a TLD binding (configurable)"},
+    {"id": "left_grip", "default_key": "Mouse0", "action": "reach the left hand to where you look and hold on; mouse moves the held hand, which drags your body", "when_active": "gorilla mode, on foot", "verified": "unverified in game"},
+    {"id": "right_grip", "default_key": "Mouse1", "action": "same for the right hand", "when_active": "gorilla mode, on foot", "verified": "unverified in game"},
+    {"id": "third_person", "default_key": "V", "action": "pull the camera back to see your gorilla", "when_active": "gorilla mode", "verified": "unverified in game"},
+    {"id": "mouse_arm_sensitivity", "default_key": "0.004", "action": "metres of hand travel per mouse count while gripping", "when_active": "gorilla mode", "verified": "unverified in game: tune by feel"}
+  ]
+}

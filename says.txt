@@ -1,0 +1,5 @@
+Gorilla Drive: play The Long Drive as a Gorilla Tag gorilla. Single player.
+- Your gorilla's body, hands and fur are read from your own Gorilla Tag install every time the game starts (nothing from Gorilla Tag is shipped).
+- Gorilla Tag's arm locomotion on mouse: hold left/right mouse to grab the ground, walls or your car with that hand, drag the mouse to pull yourself along, let go to fling yourself with Gorilla Tag's jump rules.
+- Everything else in The Long Drive works as normal: get in the car to drive, loot, refuel. Gorilla movement pauses while you're seated.
+- G toggles gorilla mode, V toggles a third-person view of your gorilla.

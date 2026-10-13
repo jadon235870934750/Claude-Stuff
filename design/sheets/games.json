@@ -1,0 +1,42 @@
+{
+  "sheet": "games",
+  "about": "Games the mashup joins. Each row is one game; role decides how Melty treats it.",
+  "columns": [
+    "id",
+    "melty_slug",
+    "role",
+    "steam_app_id",
+    "engine",
+    "scripting",
+    "data_folder",
+    "folder_token",
+    "how_mod_gets_folder",
+    "verified"
+  ],
+  "rows": [
+    {
+      "id": "tld",
+      "melty_slug": "custom-the-long-drive",
+      "role": "primary",
+      "steam_app_id": "1017180",
+      "engine": "Unity",
+      "scripting": "Mono (managed Assembly-CSharp.dll)",
+      "data_folder": "TheLongDrive_Data",
+      "folder_token": "{game}",
+      "how_mod_gets_folder": "BepInEx Paths.GameRootPath (the mod runs inside it)",
+      "verified": "unverified: engine/scripting from community knowledge (TLDLoader is a managed-code loader); confirm Managed/ folder exists on install"
+    },
+    {
+      "id": "gt",
+      "melty_slug": "custom-gorilla-tag",
+      "role": "companion",
+      "steam_app_id": "1533390",
+      "engine": "Unity",
+      "scripting": "Mono (BepInEx 5 community route)",
+      "data_folder": "Gorilla Tag_Data",
+      "folder_token": "{game:custom-gorilla-tag}",
+      "how_mod_gets_folder": "launch argument --gorilladrive-gt={game:custom-gorilla-tag} set by Melty; fallbacks: env GORILLADRIVE_GT_DIR, config GorillaTagFolder, Steam library lookup of app 1533390",
+      "verified": "partly: creator's install runs BepInEx 5 (confirms Mono); data folder name still from community knowledge, reader also globs *_Data"
+    }
+  ]
+}

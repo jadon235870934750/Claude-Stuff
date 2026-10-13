@@ -1,0 +1,15 @@
+{
+  "sheet": "locomotion",
+  "about": "Gorilla Tag's own movement rules. Values are the defaults of Another Axiom's open-source GorillaLocomotion Player (MIT). Each row is one tunable; it becomes a field in LocomotionRules and a BepInEx config entry.",
+  "columns": ["id", "value", "unit", "meaning", "source", "verified"],
+  "rows": [
+    {"id": "maxArmLength", "value": 1.5, "unit": "m", "meaning": "furthest a hand can be from the head", "source": "GorillaLocomotion Player.maxArmLength", "verified": "yes: open-source default"},
+    {"id": "unStickDistance", "value": 1.0, "unit": "m", "meaning": "a stuck hand lets go if the virtual hand moves this far from it", "source": "Player.unStickDistance", "verified": "yes: open-source default"},
+    {"id": "velocityLimit", "value": 0.4, "unit": "m/s", "meaning": "release speed below which no jump is applied", "source": "Player.velocityLimit", "verified": "yes: open-source default"},
+    {"id": "maxJumpSpeed", "value": 6.5, "unit": "m/s", "meaning": "cap on launch speed", "source": "Player.maxJumpSpeed", "verified": "yes: open-source default"},
+    {"id": "jumpMultiplier", "value": 1.1, "unit": "x", "meaning": "boost applied to release velocity", "source": "Player.jumpMultiplier", "verified": "yes: open-source default"},
+    {"id": "velocityHistorySize", "value": 8, "unit": "frames", "meaning": "frames averaged for release velocity", "source": "Player.velocityHistorySize", "verified": "yes: open-source default"},
+    {"id": "handRadius", "value": 0.1, "unit": "m", "meaning": "sphere cast radius used for hand contact", "source": "GorillaLocomotion example rig sphere collider", "verified": "yes: open-source example"},
+    {"id": "gravity", "value": 9.81, "unit": "m/s2", "meaning": "fall acceleration while in gorilla mode and airborne", "source": "Unity default Physics.gravity used by Gorilla Tag", "verified": "yes"}
+  ]
+}

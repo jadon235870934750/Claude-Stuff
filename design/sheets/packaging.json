@@ -1,0 +1,78 @@
+{
+  "sheet": "packaging",
+  "about": "Files in the release zip. Each row is one shipped file or folder and its destination. Games' own files are never shipped.",
+  "columns": [
+    "id",
+    "archive_path",
+    "destination",
+    "author",
+    "license",
+    "why",
+    "verified"
+  ],
+  "rows": [
+    {
+      "id": "bepinex_core",
+      "archive_path": "BepInEx/core/",
+      "destination": "{game}/BepInEx/core",
+      "author": "BepInEx team",
+      "license": "MIT",
+      "why": "mod loader; Melty installs none for The Long Drive",
+      "verified": "yes: from official 5.4.23.2 x64 release"
+    },
+    {
+      "id": "doorstop_proxy",
+      "archive_path": "winhttp.dll",
+      "destination": "{game}",
+      "author": "NeighTools (UnityDoorstop)",
+      "license": "LGPL-2.1",
+      "why": "starts BepInEx when the game starts",
+      "verified": "yes: from official BepInEx release"
+    },
+    {
+      "id": "doorstop_config",
+      "archive_path": "doorstop_config.ini",
+      "destination": "{game}",
+      "author": "BepInEx team",
+      "license": "MIT",
+      "why": "points doorstop at BepInEx preloader",
+      "verified": "yes"
+    },
+    {
+      "id": "plugin",
+      "archive_path": "BepInEx/plugins/GorillaDrive/GorillaDrive.dll",
+      "destination": "{game}/BepInEx/plugins/GorillaDrive",
+      "author": "this project",
+      "license": "TBD by creator",
+      "why": "the mashup",
+      "verified": "builds; untested in game"
+    },
+    {
+      "id": "assetstools",
+      "archive_path": "BepInEx/plugins/GorillaDrive/AssetsTools.NET.dll",
+      "destination": "{game}/BepInEx/plugins/GorillaDrive",
+      "author": "nesrak1",
+      "license": "MIT",
+      "why": "reads Gorilla Tag's asset files",
+      "verified": "yes: NuGet 3.0.5 netstandard2.0"
+    },
+    {
+      "id": "classdata",
+      "archive_path": "BepInEx/plugins/GorillaDrive/classdata.tpk",
+      "destination": "{game}/BepInEx/plugins/GorillaDrive",
+      "author": "nesrak1 (UABEA)",
+      "license": "MIT",
+      "why": "Unity type layouts for asset files without type trees",
+      "verified": "yes: from UABEA ReleaseFiles"
+    },
+    {
+      "id": "credits",
+      "archive_path": "BepInEx/plugins/GorillaDrive/CREDITS.txt",
+      "destination": "{game}/BepInEx/plugins/GorillaDrive",
+      "author": "this project",
+      "license": "n/a",
+      "why": "credit + license texts",
+      "verified": "yes"
+    }
+  ]
+}
