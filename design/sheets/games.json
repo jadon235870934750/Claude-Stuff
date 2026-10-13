@@ -8,6 +8,7 @@
     "steam_app_id",
     "engine",
     "scripting",
+    "executable",
     "data_folder",
     "folder_token",
     "how_mod_gets_folder",
@@ -24,7 +25,8 @@
       "data_folder": "TheLongDrive_Data",
       "folder_token": "{game}",
       "how_mod_gets_folder": "BepInEx Paths.GameRootPath (the mod runs inside it)",
-      "verified": "unverified: engine/scripting from community knowledge (TLDLoader is a managed-code loader); confirm Managed/ folder exists on install"
+      "verified": "unverified: engine/scripting from community knowledge (TLDLoader is a managed-code loader); confirm Managed/ folder exists on install",
+      "executable": "TheLongDrive.exe (verified by creator)"
     },
     {
       "id": "gt",
@@ -36,7 +38,8 @@
       "data_folder": "Gorilla Tag_Data",
       "folder_token": "{game:custom-gorilla-tag}",
       "how_mod_gets_folder": "launch argument --gorilladrive-gt={game:custom-gorilla-tag} set by Melty; fallbacks: env GORILLADRIVE_GT_DIR, config GorillaTagFolder, Steam library lookup of app 1533390",
-      "verified": "partly: creator's install runs BepInEx 5 (confirms Mono); data folder name still from community knowledge, reader also globs *_Data"
+      "verified": "partly: creator's install runs BepInEx 5 (confirms Mono); data folder name still from community knowledge, reader also globs *_Data",
+      "executable": "not launched (content read from its folder)"
     }
   ]
 }

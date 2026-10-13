@@ -2,15 +2,38 @@
   "schemaVersion": 1,
   "mode": "installed",
   "games": [
-    {"slug": "custom-the-long-drive", "role": "primary"},
-    {"slug": "custom-gorilla-tag", "role": "companion"}
+    {
+      "slug": "custom-the-long-drive",
+      "role": "primary"
+    },
+    {
+      "slug": "custom-gorilla-tag",
+      "role": "companion"
+    }
   ],
   "components": [
-    {"id": "main", "fileName": "GorillaDrive-0.1.0.zip", "label": "Gorilla Drive (BepInEx 5 + mod)", "kind": "main", "required": true}
+    {
+      "id": "main",
+      "fileName": "GorillaDrive-0.1.1.zip",
+      "label": "Gorilla Drive (BepInEx 5 + mod)",
+      "kind": "main",
+      "required": true
+    }
   ],
   "requirements": [],
   "mappings": [
-    {"component": "main", "from": "", "to": "{game}"}
+    {
+      "component": "main",
+      "from": "",
+      "to": "{game}"
+    }
   ],
-  "launch": {"kind": "game", "args": ["--gorilladrive-gt={game:custom-gorilla-tag}"]}
+  "launch": {
+    "kind": "exe",
+    "path": "{game}/TheLongDrive.exe",
+    "args": [
+      "--gorilladrive-gt={game:custom-gorilla-tag}"
+    ],
+    "cwd": "{game}"
+  }
 }
