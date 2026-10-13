@@ -43,7 +43,7 @@
       "archive_path": "BepInEx/plugins/GorillaDrive/GorillaDrive.dll",
       "destination": "{game}/BepInEx/plugins/GorillaDrive",
       "author": "this project",
-      "license": "TBD by creator",
+      "license": "MIT",
       "why": "the mashup",
       "verified": "builds; untested in game"
     },
