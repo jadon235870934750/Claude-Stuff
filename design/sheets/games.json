@@ -20,12 +20,12 @@
       "melty_slug": "custom-the-long-drive",
       "role": "primary",
       "steam_app_id": "1017180",
-      "engine": "Unity",
+      "engine": "Unity 2022.3.12 (from BepInEx log)",
       "scripting": "Mono (managed Assembly-CSharp.dll)",
       "data_folder": "TheLongDrive_Data",
       "folder_token": "{game}",
       "how_mod_gets_folder": "BepInEx Paths.GameRootPath (the mod runs inside it)",
-      "verified": "unverified: engine/scripting from community knowledge (TLDLoader is a managed-code loader); confirm Managed/ folder exists on install",
+      "verified": "yes: BepInEx log on creator PC (Unity 2022.3.12, Mono, TheLongDrive.exe)",
       "executable": "TheLongDrive.exe (verified by creator)"
     },
     {
@@ -33,7 +33,7 @@
       "melty_slug": "custom-gorilla-tag",
       "role": "companion",
       "steam_app_id": "1533390",
-      "engine": "Unity",
+      "engine": "Unity 6 (6000.x, per creator)",
       "scripting": "Mono (BepInEx 5 community route)",
       "data_folder": "Gorilla Tag_Data",
       "folder_token": "{game:custom-gorilla-tag}",

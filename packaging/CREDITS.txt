@@ -9,7 +9,7 @@ Included third-party software:
 - UnityDoorstop 4.3.0, winhttp.dll (NeighTools) - LGPL-2.1 - licenses/UnityDoorstop-LICENSE.txt
   Source: https://github.com/NeighTools/UnityDoorstop
 - AssetsTools.NET 3.0.5 (nesrak1) - MIT - licenses/AssetsTools.NET-LICENSE.txt
-- classdata.tpk from UABEA (nesrak1) - MIT - licenses/UABEA-classdata-LICENSE.txt
+- classdata.tpk, Unity type layouts packed by AssetRipper Tpk (ds5678) - MIT - licenses/AssetRipper-Tpk-LICENSE.txt
 
 Movement rules follow Another Axiom's open-source GorillaLocomotion (MIT).
 The Long Drive is by Gabor Pinter; Gorilla Tag is by Another Axiom. This mod is

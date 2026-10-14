@@ -1,16 +1,24 @@
 {
   "sheet": "gt_content",
   "about": "Gorilla Tag content read at runtime from the player's own Gorilla Tag folder. Nothing here is shipped; each row is located by the reader and rebuilt as a Unity object inside The Long Drive.",
-  "columns": ["id", "unity_class", "match_rule", "used_for", "fallback_if_missing", "code_struct", "verified"],
+  "columns": [
+    "id",
+    "unity_class",
+    "match_rule",
+    "used_for",
+    "fallback_if_missing",
+    "code_struct",
+    "verified"
+  ],
   "rows": [
     {
       "id": "gorilla_skin",
       "unity_class": "SkinnedMeshRenderer",
-      "match_rule": "GameObject name contains 'gorilla' (case-insensitive) and mesh has >= 1 bone whose name contains 'hand'; prefer the one with most vertices",
+      "match_rule": "SkinnedMeshRenderer with a 'hand' bone, scored: +40 'gorilla' in name, +40 'body'/'player'/exactly 'gorilla', +20 head bone, +10 left hand, -100 cosmetic words (glove, hat, ...); best score >= 30, ties by vertex count",
       "used_for": "source of the body mesh, its bones (names + parents) and its material's main texture",
       "fallback_if_missing": "log 'GorillaDrive: gorilla rig not found' and keep the vanilla player (mod idles)",
       "code_struct": "GtRig",
-      "verified": "unverified: needs a Gorilla Tag install to confirm the match picks the player gorilla"
+      "verified": "partly: first run picked cosmetic 'GorillaGloves' (bundle) because main files were unreadable; rule now excludes cosmetics and logs all candidates"
     },
     {
       "id": "gorilla_mesh",
@@ -24,7 +32,7 @@
     {
       "id": "gorilla_fur",
       "unity_class": "Texture2D",
-      "match_rule": "first Material of gorilla_skin -> m_SavedProperties texture '_MainTex' or '_BaseMap'",
+      "match_rule": "first material texture named _MainTex/_BaseMap/_BaseColorMap/_Albedo/_MainTexture, else first non-normal/mask texture; logs every material's texture names",
       "used_for": "fur texture on body and hands",
       "fallback_if_missing": "flat brown material (#5a3a22) so the gorilla still shows",
       "code_struct": "GtTexture",
@@ -37,7 +45,7 @@
       "used_for": "first-person left hand, posed in that bone's bind-pose space",
       "fallback_if_missing": "hand drawn as a 0.12 m fur-textured sphere",
       "code_struct": "GtPart",
-      "verified": "unverified: bone naming in Gorilla Tag rig"
+      "verified": "partly: Gorilla Tag rig uses hand.L / hand.R (creator's log)"
     },
     {
       "id": "right_hand_part",
@@ -46,7 +54,7 @@
       "used_for": "first-person right hand",
       "fallback_if_missing": "hand drawn as a 0.12 m fur-textured sphere",
       "code_struct": "GtPart",
-      "verified": "unverified: bone naming in Gorilla Tag rig"
+      "verified": "partly: Gorilla Tag rig uses hand.L / hand.R (creator's log)"
     },
     {
       "id": "body_part",

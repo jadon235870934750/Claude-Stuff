@@ -19,4 +19,4 @@ The Long Drive (Steam 1017180) and Gorilla Tag (Steam 1533390), both installed. 
 Build: `dotnet build -c Release src/GorillaDrive && python3 tools/package.py`
 
 ## Credits
-BepInEx (MIT), UnityDoorstop (LGPL-2.1, NeighTools), AssetsTools.NET and UABEA class data (MIT, nesrak1). Movement follows Another Axiom's open-source GorillaLocomotion (MIT). Not affiliated with Gabor Pinter or Another Axiom.
+BepInEx (MIT), UnityDoorstop (LGPL-2.1, NeighTools), AssetsTools.NET (MIT, nesrak1), Unity type data from AssetRipper Tpk (MIT, ds5678). Movement follows Another Axiom's open-source GorillaLocomotion (MIT). Not affiliated with Gabor Pinter or Another Axiom.

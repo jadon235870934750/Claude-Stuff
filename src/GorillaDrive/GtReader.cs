@@ -31,6 +31,7 @@ namespace GorillaDrive
     public class GtRig
     {
         public string SourceFile;
+        public int Score;
         public string GameObjectName;
         public GtMeshData Mesh;
         public GtTexture Fur;
@@ -78,6 +79,16 @@ namespace GorillaDrive
                 foreach (var f in Directory.GetFiles(streaming, "*.bundle", SearchOption.AllDirectories)) yield return f;
         }
 
+        int _logged;
+        int _assetErrors;
+        readonly List<string> _candidates = new List<string>();
+
+        static string Describe(Exception e)
+        {
+            var frame = (e.StackTrace ?? "").Split('\n').Select(l => l.Trim()).FirstOrDefault(l => l.Length > 0) ?? "";
+            return e.GetType().Name + ": " + e.Message + " @ " + frame;
+        }
+
         public GtRig FindGorilla()
         {
             var dataDir = FindDataDir(_gtDir);
@@ -94,19 +105,24 @@ namespace GorillaDrive
                     {
                         foreach (var inst in Open(am, path))
                         {
-                            if (!inst.file.Metadata.TypeTreeEnabled)
-                                am.LoadClassDatabaseFromPackage(inst.file.Metadata.UnityVersion);
+                            var md = inst.file.Metadata;
+                            if (!md.TypeTreeEnabled)
+                                am.LoadClassDatabaseFromPackage(md.UnityVersion);
+                            if (_logged++ < 3)
+                                _log($"{Path.GetFileName(path)}: Unity {md.UnityVersion}, format {inst.file.Header.Version}, type trees {(md.TypeTreeEnabled ? "yes" : "no (class data)")}, {md.AssetInfos.Count} assets");
                             var rig = ScanFile(am, inst, dataDir, path);
                             if (rig != null && (best == null || rig.Mesh.VertexCount > best.Mesh.VertexCount))
                                 best = rig;
                         }
                     }
-                    catch (Exception e) { _log("skip " + Path.GetFileName(path) + ": " + e.Message); }
+                    catch (Exception e) { _log("skip " + Path.GetFileName(path) + ": " + Describe(e)); }
                     finally { am.UnloadAll(); }
-                    if (best != null && best.Fur != null) break; // first good rig wins; files are scanned main scene first
+                    if (best != null && best.Score >= 100 && best.Fur != null) break;
                 }
             }
             finally { am.UnloadAll(true); }
+            _log($"gorilla candidates ({_candidates.Count}, {_assetErrors} unreadable renderers):");
+            foreach (var c in _candidates.Take(40)) _log("  " + c);
             return best;
         }
 
@@ -123,7 +139,7 @@ namespace GorillaDrive
                     if (inst != null) yield return inst;
                 }
             }
-            else yield return am.LoadAssetsFile(path, true);
+            else yield return am.LoadAssetsFile(path, false);
         }
 
         static readonly Regex HandBone = new Regex("hand", RegexOptions.IgnoreCase);
@@ -133,11 +149,42 @@ namespace GorillaDrive
             GtRig best = null;
             foreach (var info in inst.file.GetAssetsOfType(AssetClassID.SkinnedMeshRenderer))
             {
+                try
+                {
+                    var rig = ReadRenderer(am, inst, info, dataDir, path);
+                    if (rig != null && (best == null || rig.Score > best.Score || rig.Score == best.Score && rig.Mesh.VertexCount > best.Mesh.VertexCount))
+                        best = rig;
+                }
+                catch (Exception e)
+                {
+                    if (_assetErrors++ < 5) _log($"  renderer {info.PathId} in {Path.GetFileName(path)}: {Describe(e)}");
+                }
+            }
+            return best;
+        }
+
+        static readonly Regex Cosmetic = new Regex("glove|hat|badge|cosmetic|holdable|face|cape|shirt|pants|fur_?overlay|ragdoll", RegexOptions.IgnoreCase);
+
+        static int Score(string goName, string meshName, string[] bones)
+        {
+            bool l = bones.Any(n => HandBone.IsMatch(n) && n.IndexOf("L", StringComparison.Ordinal) >= 0);
+            bool head = bones.Any(n => n.IndexOf("head", StringComparison.OrdinalIgnoreCase) >= 0);
+            int score = 0;
+            if (Regex.IsMatch(goName + " " + meshName, "gorilla", RegexOptions.IgnoreCase)) score += 40;
+            if (Regex.IsMatch(goName + " " + meshName, "body|player|^gorilla$", RegexOptions.IgnoreCase)) score += 40;
+            if (head) score += 20;
+            if (l) score += 10;
+            if (Cosmetic.IsMatch(goName + " " + meshName)) score -= 100;
+            return score;
+        }
+
+        GtRig ReadRenderer(AssetsManager am, AssetsFileInstance inst, AssetFileInfo info, string dataDir, string path)
+        {
+            {
                 var smr = am.GetBaseField(inst, info);
                 var go = am.GetExtAsset(inst, smr["m_GameObject"]);
-                if (go.baseField == null) continue;
+                if (go.baseField == null) return null;
                 var goName = go.baseField["m_Name"].AsString;
-                if (goName.IndexOf("gorilla", StringComparison.OrdinalIgnoreCase) < 0) continue;
 
                 var bones = smr["m_Bones.Array"].Children;
                 var boneNames = new string[bones.Count];
@@ -146,26 +193,30 @@ namespace GorillaDrive
                 for (int i = 0; i < bones.Count; i++)
                 {
                     var tr = am.GetExtAsset(inst, bones[i]);
-                    if (tr.baseField == null) { boneNames[i] = ""; continue; }
+                    if (tr.baseField == null) { boneNames[i] = ""; boneFathers[i] = -1; continue; }
                     boneTransformIds[i] = tr.info.PathId;
                     boneFathers[i] = tr.baseField["m_Father.m_PathID"].AsLong;
                     var bgo = am.GetExtAsset(tr.file, tr.baseField["m_GameObject"]);
                     boneNames[i] = bgo.baseField?["m_Name"].AsString ?? "";
                 }
-                if (!boneNames.Any(n => HandBone.IsMatch(n))) continue;
+                if (!boneNames.Any(n => HandBone.IsMatch(n))) return null;
 
                 var meshAsset = am.GetExtAsset(inst, smr["m_Mesh"]);
-                if (meshAsset.baseField == null) continue;
+                if (meshAsset.baseField == null) return null;
+                var meshName = meshAsset.baseField["m_Name"].AsString;
+                int score = Score(goName, meshName, boneNames);
+                _candidates.Add($"score {score}: '{goName}' mesh '{meshName}', {boneNames.Length} bones, in {Path.GetFileName(path)}");
+                if (score < 30) return null;
                 var mesh = ReadMesh(meshAsset.baseField, dataDir, path);
-                if (mesh == null) continue;
-                if (best != null && mesh.VertexCount <= best.Mesh.VertexCount) continue;
+                if (mesh == null) return null;
 
                 var parents = new int[bones.Count];
                 for (int i = 0; i < bones.Count; i++)
                     parents[i] = Array.IndexOf(boneTransformIds, boneFathers[i]);
 
-                best = new GtRig
+                return new GtRig
                 {
+                    Score = score,
                     SourceFile = Path.GetFileName(path),
                     GameObjectName = goName,
                     Mesh = mesh,
@@ -174,23 +225,28 @@ namespace GorillaDrive
                     Fur = ReadMainTexture(am, inst, smr, dataDir, path),
                 };
             }
-            return best;
         }
 
         GtTexture ReadMainTexture(AssetsManager am, AssetsFileInstance inst, AssetTypeValueField smr, string dataDir, string path)
         {
+            var preferred = new[] { "_MainTex", "_BaseMap", "_BaseColorMap", "_Albedo", "_MainTexture" };
+            foreach (var pass in new[] { 0, 1 })
             foreach (var matPtr in smr["m_Materials.Array"].Children)
             {
                 var mat = am.GetExtAsset(inst, matPtr);
                 if (mat.baseField == null) continue;
-                foreach (var pair in mat.baseField["m_SavedProperties.m_TexEnvs.Array"].Children)
+                var pairs = mat.baseField["m_SavedProperties.m_TexEnvs.Array"].Children;
+                if (pass == 0) _log($"material '{mat.baseField["m_Name"].AsString}' textures: " + string.Join(", ", pairs.Select(p => p["first"].AsString).ToArray()));
+                foreach (var pair in pairs)
                 {
                     var name = pair["first"].AsString;
-                    if (name != "_MainTex" && name != "_BaseMap") continue;
+                    if (pass == 0 && Array.IndexOf(preferred, name) < 0) continue;
+                    if (pass == 1 && Regex.IsMatch(name, "normal|bump|mask|emission|occlusion|detail|metallic", RegexOptions.IgnoreCase)) continue;
+                    if (pair["second.m_Texture.m_PathID"].AsLong == 0) continue;
                     var tex = am.GetExtAsset(mat.file, pair["second.m_Texture"]);
                     if (tex.baseField == null) continue;
                     var t = ReadTexture(tex.baseField, dataDir, path);
-                    if (t != null) return t;
+                    if (t != null) { _log($"fur texture: {name} = {t.Name} ({t.Width}x{t.Height}, format {t.Format})"); return t; }
                 }
             }
             return null;

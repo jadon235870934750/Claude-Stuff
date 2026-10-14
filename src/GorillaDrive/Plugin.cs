@@ -13,7 +13,7 @@ namespace GorillaDrive
     public class Plugin : BaseUnityPlugin
     {
         public const string Guid = "gg.melty.gorilladrive";
-        public const string Version = "0.1.1";
+        public const string Version = "0.1.2";
 
         // controls sheet
         ConfigEntry<KeyCode> _toggle, _leftGrip, _rightGrip, _thirdPerson;
@@ -111,8 +111,28 @@ namespace GorillaDrive
             return holder;
         }
 
-        void Update()
+        /// <summary>
+        /// Runs the mod from its own hidden, scene-proof object: games that clean up objects on scene load
+        /// can destroy BepInEx's manager object, which would silently stop Update.
+        /// </summary>
+        class Runner : MonoBehaviour
         {
+            public Plugin Owner;
+            void Update() => Owner.Tick();
+        }
+
+        void Start()
+        {
+            var go = new GameObject("GorillaDrive_Runner") { hideFlags = HideFlags.HideAndDontSave };
+            DontDestroyOnLoad(go);
+            go.AddComponent<Runner>().Owner = this;
+        }
+
+        bool _tickLogged;
+
+        void Tick()
+        {
+            if (!_tickLogged) { _tickLogged = true; Log("Gorilla Drive running"); }
             if (!_loaded && _loadError == null) return;
             if (!_built) Build();
 

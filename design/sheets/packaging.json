@@ -60,10 +60,10 @@
       "id": "classdata",
       "archive_path": "BepInEx/plugins/GorillaDrive/classdata.tpk",
       "destination": "{game}/BepInEx/plugins/GorillaDrive",
-      "author": "nesrak1 (UABEA)",
+      "author": "AssetRipper (ds5678), Tpk nightly lz4 build",
       "license": "MIT",
-      "why": "Unity type layouts for asset files without type trees",
-      "verified": "yes: from UABEA ReleaseFiles"
+      "why": "Unity type layouts (through Unity 6000.7) for Gorilla Tag's Unity 6 files, which ship without type trees",
+      "verified": "yes: AssetsTools 3.0.5 loads it; Mesh/SkinnedMeshRenderer templates include Unity 6.2+ LOD fields"
     },
     {
       "id": "credits",

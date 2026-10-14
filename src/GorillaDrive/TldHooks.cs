@@ -22,7 +22,13 @@ namespace GorillaDrive
         public Camera PlayerCamera()
         {
             var cam = Camera.main;
-            if (cam == null) WarnOnce("player_camera", "no main camera yet");
+            if (cam == null)
+            {
+                // Not every game tags its camera MainCamera: take the enabled camera drawn last.
+                foreach (var c in Camera.allCameras)
+                    if (c.enabled && c.targetTexture == null && (cam == null || c.depth > cam.depth)) cam = c;
+            }
+            if (cam == null) WarnOnce("player_camera", "no camera yet");
             return cam;
         }
 
