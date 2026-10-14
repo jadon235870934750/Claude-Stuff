@@ -296,7 +296,7 @@ namespace GorillaDrive
                 {
                     var name = pair["first"].AsString;
                     if (pass == 0 && Array.IndexOf(preferred, name) < 0) continue;
-                    if (pass == 1 && Regex.IsMatch(name, "normal|bump|mask|emission|occlusion|detail|metallic", RegexOptions.IgnoreCase)) continue;
+                    if (pass == 1 && Regex.IsMatch(name, "normal|bump|mask|emission|occlusion|detail|metallic|reflect|depth|gradient|weather|lightmap|deform|mouth|atlas|parallax|spec", RegexOptions.IgnoreCase)) continue;
                     if (pair["second.m_Texture.m_PathID"].AsLong == 0) continue;
                     var tex = am.GetExtAsset(mat.file, pair["second.m_Texture"]);
                     if (tex.baseField == null || tex.info.TypeId != (int)AssetClassID.Texture2D) continue;
@@ -419,7 +419,12 @@ namespace GorillaDrive
             };
             tex.Data = Bytes(t["image data"]);
             if (tex.Data == null || tex.Data.Length == 0) tex.Data = ReadStream(t["m_StreamData"], dataDir, path);
-            if (tex.Data == null) { _log("texture " + tex.Name + " data not readable"); return null; }
+            if (tex.Data == null)
+            {
+                var sd = t["m_StreamData"];
+                _log($"texture {tex.Name} data not readable (format {tex.Format}, stream '{(sd.IsDummy ? "-" : sd["path"].AsString)}' size {(sd.IsDummy ? 0 : sd["size"].AsUInt)})");
+                return null;
+            }
             return tex;
         }
 

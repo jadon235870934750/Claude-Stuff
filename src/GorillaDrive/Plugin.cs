@@ -13,7 +13,7 @@ namespace GorillaDrive
     public class Plugin : BaseUnityPlugin
     {
         public const string Guid = "gg.melty.gorilladrive";
-        public const string Version = "0.1.3";
+        public const string Version = "0.1.4";
 
         // controls sheet
         ConfigEntry<KeyCode> _toggle, _leftGrip, _rightGrip, _thirdPerson;

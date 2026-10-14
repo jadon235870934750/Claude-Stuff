@@ -1,11 +1,41 @@
 {
   "sheet": "tld_hooks",
   "about": "Every place the mod touches The Long Drive. No Harmony patches: the mod finds objects at runtime. Each row becomes one TldHook lookup.",
-  "columns": ["id", "how_found", "what_mod_does", "if_not_found", "verified"],
+  "columns": [
+    "id",
+    "how_found",
+    "what_mod_does",
+    "if_not_found",
+    "verified"
+  ],
   "rows": [
-    {"id": "player_camera", "how_found": "Camera.main", "what_mod_does": "parent for first-person gorilla hands; head position for arm reach", "if_not_found": "mod waits (title screen)", "verified": "generic Unity: yes"},
-    {"id": "player_root", "how_found": "Camera.main.transform.root, must carry a CharacterController or non-kinematic Rigidbody", "what_mod_does": "moved by gorilla locomotion", "if_not_found": "gorilla mode unavailable; log once", "verified": "unverified: TLD player motor type"},
-    {"id": "player_walk_script", "how_found": "MonoBehaviour on player_root whose type name is in config WalkScriptNames (default 'fpscontroller')", "what_mod_does": "disabled while gorilla mode is on, re-enabled when off or seated", "if_not_found": "gorilla mode still runs; WASD may fight it; log once", "verified": "unverified: class name from community knowledge"},
-    {"id": "in_vehicle", "how_found": "player_root CharacterController.enabled == false, or a WheelCollider in the parents of Camera.main", "what_mod_does": "gorilla locomotion pauses while seated; hands stay visible on screen", "if_not_found": "n/a", "verified": "unverified"}
+    {
+      "id": "player_camera",
+      "how_found": "Camera.main",
+      "what_mod_does": "parent for first-person gorilla hands; head position for arm reach",
+      "if_not_found": "mod waits (title screen)",
+      "verified": "yes: creator's log, Main Camera (MenuCam in menus)"
+    },
+    {
+      "id": "player_root",
+      "how_found": "Camera.main.transform.root, must carry a CharacterController or non-kinematic Rigidbody",
+      "what_mod_does": "moved by gorilla locomotion",
+      "if_not_found": "gorilla mode unavailable; log once",
+      "verified": "yes: creator's log, root Player(Clone), walk script fpscontroller"
+    },
+    {
+      "id": "player_walk_script",
+      "how_found": "MonoBehaviour on player_root whose type name is in config WalkScriptNames (default 'fpscontroller')",
+      "what_mod_does": "disabled while gorilla mode is on, re-enabled when off or seated",
+      "if_not_found": "gorilla mode still runs; WASD may fight it; log once",
+      "verified": "yes: creator's log, root Player(Clone), walk script fpscontroller"
+    },
+    {
+      "id": "in_vehicle",
+      "how_found": "player_root CharacterController.enabled == false, or a WheelCollider in the parents of Camera.main",
+      "what_mod_does": "gorilla locomotion pauses while seated; hands stay visible on screen",
+      "if_not_found": "n/a",
+      "verified": "unverified"
+    }
   ]
 }
