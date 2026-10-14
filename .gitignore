@@ -1,0 +1,8 @@
+mod/build/
+mod/.gradle/
+mod/run/
+mod/run-server/
+mod/run-prod/
+dist/
+build-cache/
+*.log

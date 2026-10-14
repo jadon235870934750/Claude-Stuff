@@ -1,0 +1,70 @@
+{
+  "sheet": "asset_overrides",
+  "about": "Minecraft resources the in-memory Roblox pack answers with Roblox's own files (read at load time from the player's install).",
+  "columns": [
+    "id",
+    "target",
+    "file",
+    "transform",
+    "listed",
+    "verified"
+  ],
+  "rows": [
+    {
+      "id": "sun",
+      "target": "minecraft:textures/environment/sun.png",
+      "file": "sun",
+      "transform": "jpg_to_png",
+      "listed": false,
+      "verified": "vanilla draws the sun additively, so Roblox's black background disappears"
+    },
+    {
+      "id": "moon",
+      "target": "minecraft:textures/environment/moon_phases.png",
+      "file": "moon",
+      "transform": "moon_phase_grid",
+      "listed": false,
+      "verified": "vanilla samples a 4x2 phase grid; Roblox has one moon, repeated in each cell"
+    },
+    {
+      "id": "hurt1",
+      "target": "minecraft:sounds/damage/hit1.ogg",
+      "file": "oof",
+      "transform": "copy_bytes",
+      "listed": false,
+      "verified": "entity.player.hurt and entity.player.death use damage/hit1-3"
+    },
+    {
+      "id": "hurt2",
+      "target": "minecraft:sounds/damage/hit2.ogg",
+      "file": "oof",
+      "transform": "copy_bytes",
+      "listed": false,
+      "verified": "same event, second variant"
+    },
+    {
+      "id": "hurt3",
+      "target": "minecraft:sounds/damage/hit3.ogg",
+      "file": "oof",
+      "transform": "copy_bytes",
+      "listed": false,
+      "verified": "same event, third variant"
+    },
+    {
+      "id": "font_file",
+      "target": "robloxcraft:font/roblox_ui.ttf",
+      "file": "ui_font",
+      "transform": "copy_bytes",
+      "listed": false,
+      "verified": "TTF provider loads font/<file>"
+    },
+    {
+      "id": "font_def",
+      "target": "minecraft:font/default.json",
+      "file": "ui_font",
+      "transform": "font_definition",
+      "listed": true,
+      "verified": "FontManager lists font/*.json across packs and puts the top pack's providers first; first in-game test showed the font unused until listed"
+    }
+  ]
+}

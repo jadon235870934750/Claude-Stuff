@@ -1,0 +1,105 @@
+{
+  "sheet": "block_styles",
+  "about": "How each vanilla block texture is turned into a Roblox part face. First matching row wins, top to bottom. match is a regex over the texture name (no folder, no .png).",
+  "columns": [
+    "id",
+    "match",
+    "requires",
+    "surface",
+    "studs_tile",
+    "output_size",
+    "color_mix",
+    "saturation",
+    "verified"
+  ],
+  "rows": [
+    {
+      "id": "skip_animated",
+      "match": ".*",
+      "requires": "has_mcmeta",
+      "surface": "keep",
+      "studs_tile": -1,
+      "output_size": 0,
+      "color_mix": 0.0,
+      "saturation": 1.0,
+      "verified": "water/lava/fire/prismarine carry .mcmeta frames; restyling a strip would break animation"
+    },
+    {
+      "id": "skip_overlays",
+      "match": "^(destroy_stage_\\d|.*_overlay)$",
+      "requires": "any",
+      "surface": "keep",
+      "studs_tile": -1,
+      "output_size": 0,
+      "color_mix": 0.0,
+      "saturation": 1.0,
+      "verified": "crack and tint overlays must stay as drawn"
+    },
+    {
+      "id": "skip_nonsquare",
+      "match": ".*",
+      "requires": "not_square",
+      "surface": "keep",
+      "studs_tile": -1,
+      "output_size": 0,
+      "color_mix": 0.0,
+      "saturation": 1.0,
+      "verified": "non-square textures are strips or special"
+    },
+    {
+      "id": "cutout",
+      "match": ".*",
+      "requires": "has_alpha",
+      "surface": "smooth",
+      "studs_tile": -1,
+      "output_size": 16,
+      "color_mix": 0.85,
+      "saturation": 1.25,
+      "verified": "flowers, leaves, glass, rails keep their shape but turn flat plastic colour; 0.65 still read as vanilla leaves in the first in-game test"
+    },
+    {
+      "id": "top",
+      "match": ".*_top(_.*)?$",
+      "requires": "opaque",
+      "surface": "studs",
+      "studs_tile": 0,
+      "output_size": 32,
+      "color_mix": 1.0,
+      "saturation": 1.25,
+      "verified": "Roblox parts have studs on top"
+    },
+    {
+      "id": "bottom",
+      "match": ".*_bottom(_.*)?$",
+      "requires": "opaque",
+      "surface": "inlet",
+      "studs_tile": 8,
+      "output_size": 32,
+      "color_mix": 1.0,
+      "saturation": 1.25,
+      "verified": "Roblox parts have inlets underneath; tile 8 of studs.dds"
+    },
+    {
+      "id": "side",
+      "match": ".*_(side|front|back|end|bottom_side)(\\d*|_.*)$",
+      "requires": "opaque",
+      "surface": "smooth",
+      "studs_tile": -1,
+      "output_size": 16,
+      "color_mix": 1.0,
+      "saturation": 1.25,
+      "verified": "sides of Roblox parts are smooth plastic"
+    },
+    {
+      "id": "solid",
+      "match": ".*",
+      "requires": "opaque",
+      "surface": "studs",
+      "studs_tile": 0,
+      "output_size": 32,
+      "color_mix": 1.0,
+      "saturation": 1.25,
+      "verified": "single-texture blocks (stone, dirt, planks) become studded parts"
+    }
+  ]
+}

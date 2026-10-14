@@ -1,0 +1,174 @@
+{
+  "sheet": "sky_faces",
+  "about": "Roblox's default skybox drawn in place of the Overworld sky dome. Corners are camera-relative positions of the quad (top-left, bottom-left, bottom-right, top-right as seen from inside).",
+  "columns": [
+    "id",
+    "file",
+    "corners",
+    "verified"
+  ],
+  "rows": [
+    {
+      "id": "north",
+      "file": "sky_ft",
+      "corners": [
+        [
+          -1,
+          1,
+          -1
+        ],
+        [
+          -1,
+          -1,
+          -1
+        ],
+        [
+          1,
+          -1,
+          -1
+        ],
+        [
+          1,
+          1,
+          -1
+        ]
+      ],
+      "verified": "edge-matched: ft right edge meets lf left edge (diff 1.9/255)"
+    },
+    {
+      "id": "east",
+      "file": "sky_lf",
+      "corners": [
+        [
+          1,
+          1,
+          -1
+        ],
+        [
+          1,
+          -1,
+          -1
+        ],
+        [
+          1,
+          -1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "verified": "edge-matched: lf right edge meets bk (2.8)"
+    },
+    {
+      "id": "south",
+      "file": "sky_bk",
+      "corners": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          -1,
+          1
+        ],
+        [
+          -1,
+          -1,
+          1
+        ],
+        [
+          -1,
+          1,
+          1
+        ]
+      ],
+      "verified": "edge-matched: bk right edge meets rt (0.9)"
+    },
+    {
+      "id": "west",
+      "file": "sky_rt",
+      "corners": [
+        [
+          -1,
+          1,
+          1
+        ],
+        [
+          -1,
+          -1,
+          1
+        ],
+        [
+          -1,
+          -1,
+          -1
+        ],
+        [
+          -1,
+          1,
+          -1
+        ]
+      ],
+      "verified": "edge-matched: rt right edge meets ft (2.1)"
+    },
+    {
+      "id": "up",
+      "file": "sky_up",
+      "corners": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          -1,
+          1,
+          1
+        ],
+        [
+          -1,
+          1,
+          -1
+        ],
+        [
+          1,
+          1,
+          -1
+        ]
+      ],
+      "verified": "edge-matched: up turned 90deg clockwise meets ft top (3.6)"
+    },
+    {
+      "id": "down",
+      "file": "sky_dn",
+      "corners": [
+        [
+          -1,
+          -1,
+          1
+        ],
+        [
+          1,
+          -1,
+          1
+        ],
+        [
+          1,
+          -1,
+          -1
+        ],
+        [
+          -1,
+          -1,
+          -1
+        ]
+      ],
+      "verified": "edge-matched: dn turned 90deg anticlockwise meets ft bottom (1.7)"
+    }
+  ]
+}

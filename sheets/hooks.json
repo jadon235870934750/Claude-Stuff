@@ -1,0 +1,42 @@
+{
+  "sheet": "hooks",
+  "about": "Every place the mod touches Minecraft 1.21.1 (Mojang names). Each row is one mixin.",
+  "columns": [
+    "id",
+    "mixin",
+    "target_class",
+    "target_method",
+    "at",
+    "effect",
+    "verified"
+  ],
+  "rows": [
+    {
+      "id": "pack_inject",
+      "mixin": "PackRepositoryMixin",
+      "target_class": "net.minecraft.server.packs.repository.PackRepository",
+      "target_method": "openAllSelected",
+      "at": "RETURN",
+      "effect": "appends the Roblox pack on top of the client's resource packs (client repository only)",
+      "verified": "Minecraft.java lines 604 and 895 build the client resource manager from this list"
+    },
+    {
+      "id": "sky_box",
+      "mixin": "LevelRendererMixin",
+      "target_class": "net.minecraft.client.renderer.LevelRenderer",
+      "target_method": "renderSky",
+      "at": "INVOKE VertexBuffer.unbind ordinal 0, after",
+      "effect": "draws the Roblox skybox over the vanilla sky dome, before sunrise, sun, moon and stars",
+      "verified": "read in LevelRenderer.java line 1479"
+    },
+    {
+      "id": "no_clouds",
+      "mixin": "LevelRendererMixin",
+      "target_class": "net.minecraft.client.renderer.LevelRenderer",
+      "target_method": "renderClouds",
+      "at": "HEAD, cancellable",
+      "effect": "hides Minecraft's blocky clouds while the Roblox skybox (which has its own clouds) is drawn",
+      "verified": "first in-game screenshot: vanilla cloud slabs cut across the Roblox sky"
+    }
+  ]
+}

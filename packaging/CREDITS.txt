@@ -1,0 +1,22 @@
+Robloxcraft
+===========
+A Minecraft: Java Edition mod that dresses Minecraft in Roblox. It reads Roblox's own files
+(studs, skybox, sun, moon, Source Sans font, the oof sound) from YOUR Roblox install while you
+play. No Roblox or Minecraft files are included in this download.
+
+Mod: Robloxcraft, by agoodclanker. Built with Claude Code.
+
+Bundled software
+----------------
+Prism Launcher 11.1.1 (portable, Windows)
+  https://prismlauncher.org  -  source: https://github.com/PrismLauncher/PrismLauncher
+  License: GNU General Public License v3.0. Copyright the Prism Launcher contributors.
+  Included unmodified, as released.
+
+Downloaded by Prism Launcher on first start (not bundled)
+--------------------------------------------------------
+Minecraft: Java Edition 1.21.1 (Mojang), from Mojang's servers with your own account.
+Fabric Loader 0.16.14 (FabricMC, Apache License 2.0), from maven.fabricmc.net.
+
+Minecraft is a trademark of Mojang/Microsoft. Roblox is a trademark of Roblox Corporation.
+This project is not affiliated with either.

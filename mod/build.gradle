@@ -1,0 +1,44 @@
+plugins {
+    id 'fabric-loom' version '1.11.8'
+}
+
+version = project.mod_version
+group = 'gg.melty.robloxlook'
+base { archivesName = 'robloxcraft' }
+
+repositories {
+    // Maven Central mirror; central itself rate-limits cloud builders
+    maven { url = 'https://maven-central.storage-download.googleapis.com/maven2/' }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand 'version': project.version }
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+tasks.withType(JavaCompile).configureEach { it.options.release = 21 }
+
+loom {
+    runs {
+        server { runDir = 'run-server' }
+    }
+}
+
+// Launches the remapped release jar the way players run it (intermediary names, refmap)
+tasks.register('prodClient', net.fabricmc.loom.task.prod.ClientProductionRunTask) {
+    mods.from(remapJar)
+    runDir = file('run-prod')
+    jvmArgs.add('-Drobloxcraft.robloxDir=' + (System.getenv('ROBLOXCRAFT_ROBLOX_DIR') ?: ''))
+    programArgs.addAll('--quickPlaySingleplayer', 'rbx', '--width', '1280', '--height', '720')
+}

@@ -1,0 +1,18 @@
+{
+  "sheet": "roblox_files",
+  "about": "Files the mod reads from the player's own Roblox install while Minecraft runs. Paths are relative to a Roblox version folder (the one holding RobloxPlayerBeta.exe). Nothing here is shipped.",
+  "columns": ["id", "path", "format", "width", "height", "used_by", "verified"],
+  "rows": [
+    {"id": "studs", "path": "PlatformContent/pc/textures/studs.dds", "format": "dds_dxt1", "width": 128, "height": 2048, "used_by": "block_styles", "verified": "decoded from Roblox 0.743 package content-textures3; 16 tiles of 128x128, tile 0 = studs, tile 8 = inlets"},
+    {"id": "sky_bk", "path": "PlatformContent/pc/textures/sky/sky512_bk.tex", "format": "dds_dxt1", "width": 1024, "height": 1024, "used_by": "sky_faces", "verified": "DDS header DXT1 1024x1024 in 0.743"},
+    {"id": "sky_dn", "path": "PlatformContent/pc/textures/sky/sky512_dn.tex", "format": "dds_dxt1", "width": 1024, "height": 1024, "used_by": "sky_faces", "verified": "DDS header DXT1 1024x1024 in 0.743"},
+    {"id": "sky_ft", "path": "PlatformContent/pc/textures/sky/sky512_ft.tex", "format": "dds_dxt1", "width": 1024, "height": 1024, "used_by": "sky_faces", "verified": "decoded and viewed: Roblox default sky, horizon at middle"},
+    {"id": "sky_lf", "path": "PlatformContent/pc/textures/sky/sky512_lf.tex", "format": "dds_dxt1", "width": 1024, "height": 1024, "used_by": "sky_faces", "verified": "DDS header DXT1 1024x1024 in 0.743"},
+    {"id": "sky_rt", "path": "PlatformContent/pc/textures/sky/sky512_rt.tex", "format": "dds_dxt1", "width": 1024, "height": 1024, "used_by": "sky_faces", "verified": "DDS header DXT1 1024x1024 in 0.743"},
+    {"id": "sky_up", "path": "PlatformContent/pc/textures/sky/sky512_up.tex", "format": "dds_dxt1", "width": 1024, "height": 1024, "used_by": "sky_faces", "verified": "DDS header DXT1 1024x1024 in 0.743"},
+    {"id": "sun", "path": "content/sky/sun.jpg", "format": "jpg", "width": 128, "height": 128, "used_by": "asset_overrides", "verified": "JPEG 128x128 on black in 0.743 content-sky"},
+    {"id": "moon", "path": "content/sky/moon.jpg", "format": "jpg", "width": 128, "height": 128, "used_by": "asset_overrides", "verified": "JPEG 128x128 on black in 0.743 content-sky"},
+    {"id": "oof", "path": "content/sounds/oof.ogg", "format": "ogg_vorbis", "width": 0, "height": 0, "used_by": "asset_overrides", "verified": "Ogg Vorbis header in 0.743 content-sounds"},
+    {"id": "ui_font", "path": "content/fonts/SourceSansPro-Semibold.ttf", "format": "ttf", "width": 0, "height": 0, "used_by": "asset_overrides", "verified": "TrueType (Minecraft 1.21.1 rejects CFF .otf, so BuilderSans is out)"}
+  ]
+}

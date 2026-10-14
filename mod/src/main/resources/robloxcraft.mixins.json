@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "robloxcraft.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": ["PackRepositoryMixin", "LevelRendererMixin"],
+  "injectors": { "defaultRequire": 1 }
+}
