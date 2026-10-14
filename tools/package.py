@@ -4,7 +4,7 @@
 import json, os, pathlib, zipfile, hashlib
 
 root = pathlib.Path(__file__).resolve().parent.parent
-version = "0.1.4"
+version = "0.1.5"
 bep = pathlib.Path(os.environ.get("BEPINEX_ZIP", "/opt/dl/bepinex.zip"))
 tpk = pathlib.Path(os.environ.get("CLASSDATA_TPK", "/opt/dl/tpk/lz4_file/lz4.tpk"))
 build = root / "src/GorillaDrive/bin/Release/net472"

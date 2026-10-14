@@ -21,6 +21,9 @@ namespace GorillaDrive
 
         public Camera PlayerCamera()
         {
+            // The Long Drive keeps its menu camera around in game: prefer the camera that sits on the player.
+            foreach (var c in Camera.allCameras)
+                if (c.enabled && c.targetTexture == null && FindRoot(c) != null) return c;
             var cam = Camera.main;
             if (cam == null)
             {
@@ -34,6 +37,13 @@ namespace GorillaDrive
 
         public Transform PlayerRoot(Camera cam)
         {
+            var root = FindRoot(cam);
+            if (root == null && cam != null) WarnOnce("player_root", "no CharacterController/Rigidbody above " + cam.name);
+            return root;
+        }
+
+        static Transform FindRoot(Camera cam)
+        {
             if (cam == null) return null;
             // Walk up from the camera to the first object that moves the player.
             for (var t = cam.transform; t != null; t = t.parent)
@@ -42,7 +52,6 @@ namespace GorillaDrive
                 var rb = t.GetComponent<Rigidbody>();
                 if (rb != null && !rb.isKinematic && t.GetComponentInChildren<WheelCollider>() == null) return t;
             }
-            WarnOnce("player_root", "no CharacterController/Rigidbody above the camera");
             return null;
         }
 

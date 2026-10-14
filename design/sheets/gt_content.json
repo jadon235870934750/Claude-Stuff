@@ -36,7 +36,7 @@
       "used_for": "fur texture on body and hands",
       "fallback_if_missing": "flat brown material (#5a3a22) so the gorilla still shows",
       "code_struct": "GtTexture",
-      "verified": "partly: rig material gorilla_body uses an atlas (no plain texture); fallback to material gorilla _MainTex untested"
+      "verified": "partly: darkfur's texture is RGB24 inside a bundle's .resS (archive:/CAB-...), now read from that bundle entry; untested"
     },
     {
       "id": "left_hand_part",

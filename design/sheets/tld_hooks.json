@@ -11,10 +11,10 @@
   "rows": [
     {
       "id": "player_camera",
-      "how_found": "Camera.main",
+      "how_found": "first enabled screen camera with a CharacterController/Rigidbody above it (the player camera); else Camera.main; else deepest-drawn enabled camera",
       "what_mod_does": "parent for first-person gorilla hands; head position for arm reach",
       "if_not_found": "mod waits (title screen)",
-      "verified": "yes: creator's log, Main Camera (MenuCam in menus)"
+      "verified": "yes: creator's logs; The Long Drive keeps MenuCam alive in game, so Camera.main alone flips to the menu camera"
     },
     {
       "id": "player_root",

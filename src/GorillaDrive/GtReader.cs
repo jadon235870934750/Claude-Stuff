@@ -209,7 +209,7 @@ namespace GorillaDrive
                 int score = Score(goName, meshName, boneNames);
                 _candidates.Add($"score {score}: '{goName}' mesh '{meshName}', {boneNames.Length} bones, in {Path.GetFileName(path)}");
                 if (score < 30) return null;
-                var mesh = ReadMesh(meshAsset.baseField, dataDir, path);
+                var mesh = ReadMesh(meshAsset.baseField, dataDir, path, meshAsset.file);
                 if (mesh == null) return null;
 
                 var parents = new int[bones.Count];
@@ -270,7 +270,7 @@ namespace GorillaDrive
                     {
                         var tex = am.GetExtAsset(inst, pair["second.m_Texture"]);
                         if (tex.baseField == null || tex.info.TypeId != (int)AssetClassID.Texture2D) continue;
-                        var t = ReadTexture(tex.baseField, dataDir, path);
+                        var t = ReadTexture(tex.baseField, dataDir, path, tex.file);
                         if (t != null) { rig.Fur = t; _log($"fur texture from material '{name}' {tn}: {t.Name} ({t.Width}x{t.Height}, format {t.Format})"); break; }
                     }
                     catch (Exception e) { _log($"fur '{name}' {tn}: {Describe(e)}"); }
@@ -300,7 +300,7 @@ namespace GorillaDrive
                     if (pair["second.m_Texture.m_PathID"].AsLong == 0) continue;
                     var tex = am.GetExtAsset(mat.file, pair["second.m_Texture"]);
                     if (tex.baseField == null || tex.info.TypeId != (int)AssetClassID.Texture2D) continue;
-                    var t = ReadTexture(tex.baseField, dataDir, path);
+                    var t = ReadTexture(tex.baseField, dataDir, path, tex.file);
                     if (t != null) { _log($"fur texture: {name} = {t.Name} ({t.Width}x{t.Height}, format {t.Format})"); return t; }
                 }
             }
@@ -320,7 +320,7 @@ namespace GorillaDrive
             return f.AsByteArray;
         }
 
-        byte[] ReadStream(AssetTypeValueField streamData, string dataDir, string assetsPath)
+        byte[] ReadStream(AssetTypeValueField streamData, string dataDir, string assetsPath, AssetsFileInstance owner)
         {
             if (streamData.IsDummy) return null;
             var p = streamData["path"].AsString;
@@ -331,8 +331,18 @@ namespace GorillaDrive
             string file;
             if (p.StartsWith("archive:/"))
             {
-                // resource inside the same bundle: handled by reading the bundle entry
-                return null;
+                // The data sits in a .resS entry of the bundle the asset came from.
+                var bun = owner?.parentBundle;
+                if (bun == null) return null;
+                int idx = bun.file.GetFileIndex(p.Substring(p.LastIndexOf('/') + 1));
+                if (idx < 0) return null;
+                bun.file.GetFileRange(idx, out long entryOffset, out long entryLength);
+                if (offset + size > entryLength) return null;
+                lock (bun.file.DataReader)
+                {
+                    bun.file.DataReader.Position = entryOffset + offset;
+                    return bun.file.DataReader.ReadBytes(size);
+                }
             }
             file = Path.Combine(dataDir, p);
             if (!File.Exists(file)) file = Path.Combine(Path.GetDirectoryName(assetsPath), Path.GetFileName(p));
@@ -346,7 +356,7 @@ namespace GorillaDrive
             }
         }
 
-        GtMeshData ReadMesh(AssetTypeValueField m, string dataDir, string path)
+        GtMeshData ReadMesh(AssetTypeValueField m, string dataDir, string path, AssetsFileInstance owner)
         {
             var vd = m["m_VertexData"];
             int vertexCount = (int)vd["m_VertexCount"].AsUInt;
@@ -356,7 +366,7 @@ namespace GorillaDrive
                 Format = c["format"].AsInt, Dimension = c["dimension"].AsInt,
             }).ToList();
             var data = Bytes(vd["m_DataSize"]);
-            if (data == null || data.Length == 0) data = ReadStream(m["m_StreamData"], dataDir, path);
+            if (data == null || data.Length == 0) data = ReadStream(m["m_StreamData"], dataDir, path, owner);
             if (data == null || vertexCount == 0) { _log("mesh " + m["m_Name"].AsString + " has no readable vertex data (compressed?)"); return null; }
 
             var mesh = new GtMeshData
@@ -407,7 +417,7 @@ namespace GorillaDrive
             return mesh;
         }
 
-        GtTexture ReadTexture(AssetTypeValueField t, string dataDir, string path)
+        GtTexture ReadTexture(AssetTypeValueField t, string dataDir, string path, AssetsFileInstance owner)
         {
             var tex = new GtTexture
             {
@@ -418,7 +428,7 @@ namespace GorillaDrive
                 MipCount = t["m_MipCount"].IsDummy ? 1 : t["m_MipCount"].AsInt,
             };
             tex.Data = Bytes(t["image data"]);
-            if (tex.Data == null || tex.Data.Length == 0) tex.Data = ReadStream(t["m_StreamData"], dataDir, path);
+            if (tex.Data == null || tex.Data.Length == 0) tex.Data = ReadStream(t["m_StreamData"], dataDir, path, owner);
             if (tex.Data == null)
             {
                 var sd = t["m_StreamData"];

@@ -13,7 +13,7 @@ namespace GorillaDrive
     public class Plugin : BaseUnityPlugin
     {
         public const string Guid = "gg.melty.gorilladrive";
-        public const string Version = "0.1.4";
+        public const string Version = "0.1.5";
 
         // controls sheet
         ConfigEntry<KeyCode> _toggle, _leftGrip, _rightGrip, _thirdPerson;
@@ -178,16 +178,21 @@ namespace GorillaDrive
             RestoreCamera();
             _cam = cam; _haveCamHome = false;
             if (cam == null) return;
-            _root = _hooks.PlayerRoot(cam);
-            _walk = _hooks.PlayerWalkScripts(_root);
+            var root = _hooks.PlayerRoot(cam);
+            if (root != _root)
+            {
+                // Hand the old player's walking back before switching.
+                foreach (var w in _walk) if (w != null) w.enabled = true;
+                _root = root;
+                _walk = _hooks.PlayerWalkScripts(_root);
+                if (_body != null) Destroy(_body);
+                if (_bodyMesh != null && _root != null)
+                    _body = GorillaBuilder.Spawn("GorillaDrive_body", _bodyMesh, _fur, _root, ShadowCastingMode.ShadowsOnly);
+            }
             _pitch = cam.transform.localEulerAngles.x;
-            if (_leftHand != null) Destroy(_leftHand);
-            if (_rightHand != null) Destroy(_rightHand);
-            if (_body != null) Destroy(_body);
-            _leftHand = MakeHand("left_hand_part", null);
-            _rightHand = MakeHand("right_hand_part", null);
-            if (_bodyMesh != null && _root != null)
-                _body = GorillaBuilder.Spawn("GorillaDrive_body", _bodyMesh, _fur, _root, ShadowCastingMode.ShadowsOnly);
+            // Hands are built once and survive scene loads.
+            if (_leftHand == null) { _leftHand = MakeHand("left_hand_part", null); DontDestroyOnLoad(_leftHand); }
+            if (_rightHand == null) { _rightHand = MakeHand("right_hand_part", null); DontDestroyOnLoad(_rightHand); }
             Log("Attached to player: camera " + cam.name + ", root " + (_root != null ? _root.name : "none") +
                 ", walk scripts paused while gorilla: " + string.Join(", ", _walk.Select(w => w.GetType().Name).ToArray()));
             _motor.Reset(cam.transform.position);
