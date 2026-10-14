@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "id": "robloxcraft",
+  "id": "studcraft",
   "version": "${version}",
-  "name": "Robloxcraft",
+  "name": "Studcraft",
   "description": "Minecraft dressed in Roblox: studded plastic blocks, Roblox's sky, sun, moon, font and oof, all read from your own Roblox install. You stay Steve.",
   "authors": ["agoodclanker"],
   "license": "All-Rights-Reserved",
-  "icon": "assets/robloxcraft/icon.png",
+  "icon": "assets/studcraft/icon.png",
   "environment": "client",
   "entrypoints": {
-    "client": ["robloxcraft.Robloxcraft"]
+    "client": ["studcraft.Studcraft"]
   },
-  "mixins": ["robloxcraft.mixins.json"],
+  "mixins": ["studcraft.mixins.json"],
   "depends": {
     "fabricloader": ">=0.16.0",
     "minecraft": "~1.21.1",

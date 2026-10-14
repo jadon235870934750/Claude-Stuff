@@ -1,4 +1,4 @@
-package robloxcraft;
+package studcraft;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
-import robloxcraft.gen.Sheets;
+import studcraft.gen.Sheets;
 
 /** Turns a vanilla block texture into a Roblox part face, following the block_styles sheet. */
 public final class BlockStyler {
@@ -86,7 +86,7 @@ public final class BlockStyler {
 				try {
 					studsAtlas = Dds.decode(dds);
 				} catch (RuntimeException e) {
-					Robloxcraft.LOG.warn("Robloxcraft: could not decode Roblox studs.dds", e);
+					Studcraft.LOG.warn("Studcraft: could not decode Roblox studs.dds", e);
 				}
 			}
 		}

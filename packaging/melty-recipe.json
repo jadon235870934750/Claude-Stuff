@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "mode": "installed",
+  "games": [
+    {
+      "slug": "minecraft-java",
+      "role": "primary",
+      "version": "1.21.1"
+    },
+    {
+      "slug": "roblox",
+      "role": "companion"
+    }
+  ],
+  "components": [
+    {
+      "id": "main",
+      "fileName": "studcraft-0.1.0.jar",
+      "label": "Studcraft mod",
+      "kind": "main",
+      "required": true
+    }
+  ],
+  "requirements": [
+    {
+      "kind": "loader",
+      "id": "fabric"
+    }
+  ],
+  "mappings": [
+    {
+      "component": "main",
+      "from": "studcraft-0.1.0.jar",
+      "to": "{minecraft-instance}/mods"
+    }
+  ],
+  "launch": {
+    "kind": "game",
+    "env": {
+      "STUDCRAFT_ROBLOX_DIR": "{game:roblox}"
+    }
+  },
+  "test": {
+    "checks": [
+      "roblox-found",
+      "studs-applied",
+      "roblox-sky",
+      "roblox-font",
+      "roblox-oof"
+    ],
+    "minutes": 3
+  }
+}

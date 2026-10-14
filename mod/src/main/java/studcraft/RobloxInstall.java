@@ -1,4 +1,4 @@
-package robloxcraft;
+package studcraft;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import robloxcraft.gen.Sheets;
+import studcraft.gen.Sheets;
 
 /**
  * Finds the player's own Roblox install and reads files from it. Nothing is copied out of it:
@@ -17,8 +17,8 @@ import robloxcraft.gen.Sheets;
  */
 public final class RobloxInstall {
 	/** Set by Melty from {game:roblox}; a Roblox root, its Versions folder, or one version folder. */
-	public static final String ENV = "ROBLOXCRAFT_ROBLOX_DIR";
-	public static final String PROPERTY = "robloxcraft.robloxDir";
+	public static final String ENV = "STUDCRAFT_ROBLOX_DIR";
+	public static final String PROPERTY = "studcraft.robloxDir";
 	private static final String MARKER = Sheets.FILE_STUDS.path();
 
 	private static Optional<Path> found;
@@ -29,9 +29,9 @@ public final class RobloxInstall {
 		if (found == null) {
 			found = locate();
 			if (found.isPresent()) {
-				Robloxcraft.LOG.info("Robloxcraft: reading Roblox content from {}", found.get());
+				Studcraft.LOG.info("Studcraft: reading Roblox content from {}", found.get());
 			} else {
-				Robloxcraft.LOG.warn("Robloxcraft: no Roblox install found (set {} to your Roblox folder). Minecraft stays vanilla.", ENV);
+				Studcraft.LOG.warn("Studcraft: no Roblox install found (set {} to your Roblox folder). Minecraft stays vanilla.", ENV);
 			}
 		}
 		return found;
@@ -49,7 +49,7 @@ public final class RobloxInstall {
 		try {
 			return Files.readAllBytes(p);
 		} catch (IOException e) {
-			Robloxcraft.LOG.warn("Robloxcraft: Roblox file {} missing ({})", file.path(), e.toString());
+			Studcraft.LOG.warn("Studcraft: Roblox file {} missing ({})", file.path(), e.toString());
 			return null;
 		}
 	}

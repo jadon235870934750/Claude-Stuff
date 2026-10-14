@@ -1,4 +1,4 @@
-package robloxcraft;
+package studcraft;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -22,20 +22,22 @@ import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.IoSupplier;
 import org.jetbrains.annotations.Nullable;
-import robloxcraft.gen.Sheets;
+import studcraft.gen.Sheets;
 
 /**
  * An in-memory resource pack that sits on top of Minecraft's own. Every answer is made on the fly from
  * the player's Roblox install (and, for block faces, from Minecraft's own texture underneath).
  */
 public final class RobloxPack implements PackResources {
-	public static final String ID = "robloxcraft";
+	public static final String ID = "studcraft";
 	private static final String BLOCK_DIR = "textures/block";
 	private static final PackLocationInfo INFO = new PackLocationInfo(
-		ID, Component.literal("Robloxcraft (your Roblox install)"), PackSource.BUILT_IN, Optional.empty());
+		ID, Component.literal("Studcraft (your Roblox install)"), PackSource.BUILT_IN, Optional.empty());
 	/** texture name -> restyled PNG, or empty when the vanilla texture stays. */
 	private static final Map<String, Optional<byte[]>> BLOCK_CACHE = new ConcurrentHashMap<>();
 	private static final Map<ResourceLocation, Sheets.AssetOverride> OVERRIDES = new HashMap<>();
+	/** asset_overrides ids whose bytes Minecraft actually opened (for test checks). */
+	private static final Set<String> SERVED = ConcurrentHashMap.newKeySet();
 
 	static {
 		for (Sheets.AssetOverride o : Sheets.ASSET_OVERRIDES) OVERRIDES.put(ResourceLocation.parse(o.target()), o);
@@ -54,7 +56,7 @@ public final class RobloxPack implements PackResources {
 		Sheets.AssetOverride o = OVERRIDES.get(loc);
 		if (o != null) {
 			byte[] bytes = override(o);
-			return bytes == null ? null : () -> new ByteArrayInputStream(bytes);
+			return bytes == null ? null : open(o, bytes);
 		}
 		if (loc.getNamespace().equals("minecraft") && loc.getPath().startsWith(BLOCK_DIR + "/") && loc.getPath().endsWith(".png")) {
 			byte[] bytes = block(loc);
@@ -70,7 +72,7 @@ public final class RobloxPack implements PackResources {
 			ResourceLocation loc = e.getKey();
 			if (e.getValue().listed() && loc.getNamespace().equals(namespace) && loc.getPath().startsWith(path + "/")) {
 				byte[] bytes = override(e.getValue());
-				if (bytes != null) output.accept(loc, () -> new ByteArrayInputStream(bytes));
+				if (bytes != null) output.accept(loc, open(e.getValue(), bytes));
 			}
 		}
 		if (!namespace.equals("minecraft")) return;
@@ -101,6 +103,30 @@ public final class RobloxPack implements PackResources {
 	@Override
 	public void close() {}
 
+	private static IoSupplier<InputStream> open(Sheets.AssetOverride o, byte[] bytes) {
+		return () -> {
+			SERVED.add(o.id());
+			return new ByteArrayInputStream(bytes);
+		};
+	}
+
+	/** Number of block textures turned into Roblox parts so far. */
+	public static long styledCount() {
+		return BLOCK_CACHE.values().stream().filter(Optional::isPresent).count();
+	}
+
+	public static boolean served(String overrideId) {
+		return SERVED.contains(overrideId);
+	}
+
+	/** Whether this override can be built from the player's Roblox install right now. */
+	public static boolean available(String overrideId) {
+		for (Sheets.AssetOverride o : Sheets.ASSET_OVERRIDES) {
+			if (o.id().equals(overrideId)) return override(o) != null;
+		}
+		return false;
+	}
+
 	private static PackResources vanilla() {
 		return Minecraft.getInstance().getVanillaPackResources();
 	}
@@ -120,7 +146,7 @@ public final class RobloxPack implements PackResources {
 				boolean mcmeta = vanilla().getResource(PackType.CLIENT_RESOURCES, loc.withSuffix(".mcmeta")) != null;
 				return Optional.ofNullable(BlockStyler.style(name, png, mcmeta));
 			} catch (IOException | RuntimeException e) {
-				Robloxcraft.LOG.warn("Robloxcraft: kept vanilla {} ({})", loc, e.toString());
+				Studcraft.LOG.warn("Studcraft: kept vanilla {} ({})", loc, e.toString());
 				return Optional.empty();
 			}
 		}).orElse(null);
@@ -139,7 +165,7 @@ public final class RobloxPack implements PackResources {
 				default -> throw new IllegalStateException("unknown transform " + o.transform());
 			};
 		} catch (IOException | RuntimeException e) {
-			Robloxcraft.LOG.warn("Robloxcraft: could not build {} ({})", o.target(), e.toString());
+			Studcraft.LOG.warn("Studcraft: could not build {} ({})", o.target(), e.toString());
 			return null;
 		}
 	}
@@ -160,7 +186,7 @@ public final class RobloxPack implements PackResources {
 		String json = """
 			{"providers": [
 			  {"type": "reference", "id": "minecraft:include/space"},
-			  {"type": "ttf", "file": "robloxcraft:roblox_ui.ttf", "size": 9.5, "oversample": 4.0, "shift": [0.0, 1.0], "skip": ""}
+			  {"type": "ttf", "file": "studcraft:roblox_ui.ttf", "size": 9.5, "oversample": 4.0, "shift": [0.0, 1.0], "skip": ""}
 			]}
 			""";
 		return json.getBytes(StandardCharsets.UTF_8);

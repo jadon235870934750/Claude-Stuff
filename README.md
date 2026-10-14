@@ -1,4 +1,4 @@
-# Robloxcraft
+# Studcraft
 
 **Minecraft, built out of Roblox.** You're still Steve, with Minecraft's own block menu, but the world
 is made of Roblox's studded plastic parts under Roblox's sky.
@@ -7,7 +7,7 @@ Minecraft: Java Edition 1.21.1 (Fabric) is the game you play. Roblox brings its 
 **your own Roblox install** while you play. Nothing from Roblox or Minecraft is copied into this mod
 or its download.
 
-![Robloxcraft world](media/robloxcraft-world.png)
+![Studcraft world](media/studcraft-world.png)
 
 ## What you get
 - **Studded plastic blocks.** Each block's colour becomes a Roblox part made from Roblox's own
@@ -22,11 +22,11 @@ or its download.
 - **Still Minecraft.** You keep Steve (or your own skin), the creative block menu, survival,
   crafting, mobs and worlds. Single player.
 
-![Block menu](media/robloxcraft-block-menu.png)
+![Block menu](media/studcraft-block-menu.png)
 
 ## How it finds Roblox
 In order:
-1. `ROBLOXCRAFT_ROBLOX_DIR` (Melty sets this from your Roblox install).
+1. `STUDCRAFT_ROBLOX_DIR` (the Melty recipe sets this to `{game:roblox}`).
 2. `%LOCALAPPDATA%\Roblox\Versions`.
 3. The same folder under Bloxstrap, Fishstrap or Voidstrap.
 4. `Program Files\Roblox`.
@@ -34,23 +34,29 @@ In order:
 It picks the newest version folder that holds `PlatformContent/pc/textures/studs.dds`. Without Roblox,
 Minecraft stays vanilla and the log says so.
 
+## Melty test mode
+When Melty tests a release (`%LOCALAPPDATA%\Melty\test\studcraft.json` exists), the mod makes a fresh
+creative world from the test seed, sets noon and reports `roblox-found`, `studs-applied`, `roblox-sky`,
+`roblox-font` and `roblox-oof` (the `test_checks` sheet) through Melty's own `MeltyTest.java`. In a
+player's game it does nothing.
+
 ## Layout
 | Path | What |
 |---|---|
 | `sheets/*.json` | Design sheets, the source of truth: Roblox files read, block styles, sky faces, asset overrides, game hooks |
 | `tools/sheets.py` | `preflight` checks every cell and cross-sheet reference; `generate` writes `Sheets.java` from the rows |
 | `mod/` | Fabric mod (Mojang mappings, Loom 1.11.8, Minecraft 1.21.1, Fabric Loader 0.16.14). No Fabric API needed |
-| `packaging/` | Prism Launcher instance files, credits, `package.sh`, draft Melty recipe |
+| `packaging/` | `package.sh` (builds the release jar) and `melty-recipe.json` (the validated Melty install recipe) |
 | `media/` | Screenshots of this version running |
 
 ## Build
 ```
 python3 tools/sheets.py generate     # after editing a sheet
 cd mod && ./gradlew build             # mod jar in mod/build/libs
-./packaging/package.sh                # dist/Robloxcraft-<version>-windows.zip (portable Prism + instance)
+./packaging/package.sh                # dist/studcraft-<version>.jar, the release Melty installs
 ```
 
 ## Credits
-Mod by agoodclanker, built with Claude Code. The package bundles Prism Launcher (GPL-3.0); see
-`packaging/CREDITS.txt`. Minecraft is a trademark of Mojang/Microsoft and Roblox of Roblox
+Mod by agoodclanker, built with Claude Code. Melty brings Prism Launcher, Java, Minecraft 1.21.1 and
+Fabric Loader; the release is just the mod jar. Minecraft is a trademark of Mojang/Microsoft and Roblox of Roblox
 Corporation; this project is not affiliated with either.

@@ -1,0 +1,12 @@
+{
+  "sheet": "test_checks",
+  "about": "Checks the mod reports in a Melty test run (recipe test.checks). Each proves one feature works in the running game.",
+  "columns": ["id", "proves", "condition", "verified"],
+  "rows": [
+    {"id": "roblox-found", "proves": "the player's Roblox install was found", "condition": "RobloxInstall.present()", "verified": "Linux dev run with a Roblox version folder"},
+    {"id": "studs-applied", "proves": "block textures became studded Roblox parts", "condition": "RobloxPack.styledCount() > 0", "verified": "in-game screenshot, block atlas"},
+    {"id": "roblox-sky", "proves": "the Roblox skybox was drawn", "condition": "RobloxSky.framesDrawn() > 0", "verified": "in-game screenshot"},
+    {"id": "roblox-font", "proves": "Roblox's Source Sans was handed to the font manager", "condition": "RobloxPack.served(font_file)", "verified": "chat in Source Sans in screenshot"},
+    {"id": "roblox-oof", "proves": "the hurt sound resolves to Roblox's oof.ogg", "condition": "RobloxPack.override(hurt1) != null", "verified": "bytes read from content/sounds/oof.ogg"}
+  ]
+}

@@ -1,4 +1,4 @@
-package robloxcraft;
+package studcraft;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Matrix4f;
-import robloxcraft.gen.Sheets;
+import studcraft.gen.Sheets;
 
 /** Draws Roblox's default skybox (read from the player's Roblox install) as the Overworld sky. */
 public final class RobloxSky {
@@ -28,6 +28,7 @@ public final class RobloxSky {
 	private static final Map<String, ResourceLocation> TEXTURES = new HashMap<>();
 	private static boolean loaded;
 	private static boolean available;
+	private static long framesDrawn;
 
 	private RobloxSky() {}
 
@@ -41,7 +42,7 @@ public final class RobloxSky {
 			try {
 				img = Dds.decode(dds);
 			} catch (RuntimeException e) {
-				Robloxcraft.LOG.warn("Robloxcraft: could not decode Roblox sky {}", face.file(), e);
+				Studcraft.LOG.warn("Studcraft: could not decode Roblox sky {}", face.file(), e);
 				return;
 			}
 			NativeImage n = new NativeImage(img.getWidth(), img.getHeight(), false);
@@ -63,7 +64,7 @@ public final class RobloxSky {
 			TEXTURES.put(face.id(), id);
 		}
 		available = true;
-		Robloxcraft.LOG.info("Robloxcraft: Roblox skybox loaded");
+		Studcraft.LOG.info("Studcraft: Roblox skybox loaded");
 	}
 
 	/** True once the Roblox skybox is on screen (loads it on first call). */
@@ -93,5 +94,10 @@ public final class RobloxSky {
 			b.addVertex(view, k[3][0] * RADIUS, k[3][1] * RADIUS, k[3][2] * RADIUS).setUv(1.0F, 0.0F).setColor(c, c, c, 255);
 			BufferUploader.drawWithShader(b.buildOrThrow());
 		}
+		framesDrawn++;
+	}
+
+	public static long framesDrawn() {
+		return framesDrawn;
 	}
 }

@@ -1,5 +1,9 @@
 # MODLOG
 
+## Name
+The listing is "Studcraft" because Melty already has a live "RobloxCraft" (Roblox avatars and items on a
+baseplate, a different idea). The mod id is `studcraft`.
+
 ## Route
 - Host: Minecraft Java 1.21.1 + Fabric Loader 0.16.14 (Melty installs Fabric via Prism's mmc-pack.json).
 - Roblox: companion. It is never modded or launched. Files are read from the player's install
@@ -35,5 +39,10 @@
   Xvfb/llvmpipe on Linux, with real Roblox 0.743 files laid out as a Roblox version folder.
 - Checked in game: studded blocks, skybox (seamless), no vanilla clouds, Roblox sun, Source Sans in
   chat and menus.
-- Not yet checked: the oof sound (no audio device in the build sandbox), Windows, the Prism package
-  launch, and Melty's install.
+- Melty-style test mode with the release jar (LOCALAPPDATA pointed at a scratch Melty/test file):
+  mod-loads, roblox-found, studs-applied, roblox-sky, roblox-font and roblox-oof all pass.
+- Melty validate_recipe and one_click_check: valid, one click yes.
+- Not yet checked: hearing the oof (no audio device in the build sandbox; the bytes are served),
+  Windows, and Melty's own test_release on a PC with both games.
+- Packaging: game_info says a Minecraft-hosted mashup ships only its jar to {minecraft-instance}/mods
+  (Melty brings Prism, Java and Fabric). The first Prism-bundle package was dropped for that reason.

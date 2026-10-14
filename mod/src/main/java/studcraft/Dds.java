@@ -1,4 +1,4 @@
-package robloxcraft;
+package studcraft;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;

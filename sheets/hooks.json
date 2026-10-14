@@ -37,6 +37,15 @@
       "at": "HEAD, cancellable",
       "effect": "hides Minecraft's blocky clouds while the Roblox skybox (which has its own clouds) is drawn",
       "verified": "first in-game screenshot: vanilla cloud slabs cut across the Roblox sky"
+    },
+    {
+      "id": "test_driver",
+      "mixin": "MinecraftMixin",
+      "target_class": "net.minecraft.client.Minecraft",
+      "target_method": "tick",
+      "at": "HEAD",
+      "effect": "in a Melty test run only: makes a fresh creative world from the test seed, sets noon, then writes the test_checks results",
+      "verified": "Minecraft.java line 1733; inert unless %LOCALAPPDATA%/Melty/test/studcraft.json exists"
     }
   ]
 }

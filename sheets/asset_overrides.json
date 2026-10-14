@@ -52,7 +52,7 @@
     },
     {
       "id": "font_file",
-      "target": "robloxcraft:font/roblox_ui.ttf",
+      "target": "studcraft:font/roblox_ui.ttf",
       "file": "ui_font",
       "transform": "copy_bytes",
       "listed": false,

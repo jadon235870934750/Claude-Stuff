@@ -3,8 +3,8 @@ plugins {
 }
 
 version = project.mod_version
-group = 'gg.melty.robloxlook'
-base { archivesName = 'robloxcraft' }
+group = 'studcraft'
+base { archivesName = 'studcraft' }
 
 repositories {
     // Maven Central mirror; central itself rate-limits cloud builders
@@ -39,6 +39,10 @@ loom {
 tasks.register('prodClient', net.fabricmc.loom.task.prod.ClientProductionRunTask) {
     mods.from(remapJar)
     runDir = file('run-prod')
-    jvmArgs.add('-Drobloxcraft.robloxDir=' + (System.getenv('ROBLOXCRAFT_ROBLOX_DIR') ?: ''))
-    programArgs.addAll('--quickPlaySingleplayer', 'rbx', '--width', '1280', '--height', '720')
+    jvmArgs.add('-Dstudcraft.robloxDir=' + (System.getenv('STUDCRAFT_ROBLOX_DIR') ?: ''))
+    programArgs.addAll('--width', '1280', '--height', '720')
+    // a Melty test run is set up by LOCALAPPDATA/Melty/test/studcraft.json; otherwise open the test world
+    if (!System.getenv('STUDCRAFT_TEST_RUN')) {
+        programArgs.addAll('--quickPlaySingleplayer', 'rbx')
+    }
 }

@@ -1,8 +1,8 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "robloxcraft.mixin",
+  "package": "studcraft.mixin",
   "compatibilityLevel": "JAVA_21",
-  "client": ["PackRepositoryMixin", "LevelRendererMixin"],
+  "client": ["PackRepositoryMixin", "LevelRendererMixin", "MinecraftMixin"],
   "injectors": { "defaultRequire": 1 }
 }

@@ -5,4 +5,4 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = 'roblox-look'
+rootProject.name = 'studcraft'
