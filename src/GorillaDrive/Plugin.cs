@@ -13,7 +13,7 @@ namespace GorillaDrive
     public class Plugin : BaseUnityPlugin
     {
         public const string Guid = "gg.melty.gorilladrive";
-        public const string Version = "0.1.2";
+        public const string Version = "0.1.3";
 
         // controls sheet
         ConfigEntry<KeyCode> _toggle, _leftGrip, _rightGrip, _thirdPerson;
@@ -58,6 +58,9 @@ namespace GorillaDrive
             }
             _motor.ArmSensitivity = _armSensitivity.Value;
 
+            // Start the runner now: The Long Drive can remove BepInEx's own object before it ever gets a frame.
+            StartRunner();
+
             _hooks = new TldHooks(Log) { WalkScriptNames = _walkScripts.Value.Split(',').Select(s => s.Trim()).Where(s => s.Length > 0).ToArray() };
             _gorilla = _startAsGorilla.Value;
 
@@ -85,7 +88,7 @@ namespace GorillaDrive
         void Build()
         {
             _built = true;
-            _fur = GorillaBuilder.BuildMaterial(_rig?.Fur, Log);
+            _fur = GorillaBuilder.BuildMaterial(_rig?.Fur, _rig?.Tint, Log);
             if (_parts != null)
             {
                 var body = _parts.First(p => p.Id == "body_part");
@@ -121,7 +124,7 @@ namespace GorillaDrive
             void Update() => Owner.Tick();
         }
 
-        void Start()
+        void StartRunner()
         {
             var go = new GameObject("GorillaDrive_Runner") { hideFlags = HideFlags.HideAndDontSave };
             DontDestroyOnLoad(go);

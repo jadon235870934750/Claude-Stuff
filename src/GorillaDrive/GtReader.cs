@@ -32,6 +32,7 @@ namespace GorillaDrive
     {
         public string SourceFile;
         public int Score;
+        public float[] Tint; // rgb, from the gorilla material's base colour
         public string GameObjectName;
         public GtMeshData Mesh;
         public GtTexture Fur;
@@ -111,13 +112,14 @@ namespace GorillaDrive
                             if (_logged++ < 3)
                                 _log($"{Path.GetFileName(path)}: Unity {md.UnityVersion}, format {inst.file.Header.Version}, type trees {(md.TypeTreeEnabled ? "yes" : "no (class data)")}, {md.AssetInfos.Count} assets");
                             var rig = ScanFile(am, inst, dataDir, path);
-                            if (rig != null && (best == null || rig.Mesh.VertexCount > best.Mesh.VertexCount))
+                            if (rig != null && rig.Fur == null) FindFurInFile(am, inst, dataDir, path, rig);
+                            if (rig != null && (best == null || rig.Score > best.Score || rig.Score == best.Score && rig.Mesh.VertexCount > best.Mesh.VertexCount))
                                 best = rig;
                         }
                     }
                     catch (Exception e) { _log("skip " + Path.GetFileName(path) + ": " + Describe(e)); }
                     finally { am.UnloadAll(); }
-                    if (best != null && best.Score >= 100 && best.Fur != null) break;
+                    if (best != null && best.Score >= 70 && (best.Fur != null || best.Tint != null)) break;
                 }
             }
             finally { am.UnloadAll(true); }
@@ -227,6 +229,57 @@ namespace GorillaDrive
             }
         }
 
+        static readonly string[] FurMaterials = { "gorilla", "lightfur", "darkfur", "gorilla_body" };
+
+        /// <summary>
+        /// Gorilla Tag's player shader takes its fur from an atlas, so the rig's own material often has no plain
+        /// texture. Fall back to the game's fur materials in the same file, and keep the body colour as a tint.
+        /// </summary>
+        void FindFurInFile(AssetsManager am, AssetsFileInstance inst, string dataDir, string path, GtRig rig)
+        {
+            var mats = new Dictionary<string, AssetTypeValueField>();
+            foreach (var info in inst.file.GetAssetsOfType(AssetClassID.Material))
+            {
+                try
+                {
+                    var m = am.GetBaseField(inst, info);
+                    var name = m["m_Name"].AsString;
+                    if (Array.IndexOf(FurMaterials, name) >= 0 && !mats.ContainsKey(name)) mats[name] = m;
+                }
+                catch { }
+            }
+            foreach (var name in FurMaterials)
+            {
+                if (!mats.TryGetValue(name, out var m)) continue;
+                if (rig.Tint == null)
+                    foreach (var c in m["m_SavedProperties.m_Colors.Array"].Children)
+                    {
+                        var cn = c["first"].AsString;
+                        if (cn != "_BaseColor" && cn != "_Color") continue;
+                        rig.Tint = new[] { c["second.r"].AsFloat, c["second.g"].AsFloat, c["second.b"].AsFloat };
+                        _log($"fur tint from '{name}' {cn}: {rig.Tint[0]:0.00} {rig.Tint[1]:0.00} {rig.Tint[2]:0.00}");
+                        break;
+                    }
+                if (rig.Fur != null) continue;
+                foreach (var pair in m["m_SavedProperties.m_TexEnvs.Array"].Children)
+                {
+                    var tn = pair["first"].AsString;
+                    if (tn != "_MainTex" && tn != "_BaseMap") continue;
+                    if (pair["second.m_Texture.m_PathID"].AsLong == 0) continue;
+                    try
+                    {
+                        var tex = am.GetExtAsset(inst, pair["second.m_Texture"]);
+                        if (tex.baseField == null || tex.info.TypeId != (int)AssetClassID.Texture2D) continue;
+                        var t = ReadTexture(tex.baseField, dataDir, path);
+                        if (t != null) { rig.Fur = t; _log($"fur texture from material '{name}' {tn}: {t.Name} ({t.Width}x{t.Height}, format {t.Format})"); break; }
+                    }
+                    catch (Exception e) { _log($"fur '{name}' {tn}: {Describe(e)}"); }
+                }
+            }
+        }
+
+        readonly HashSet<string> _loggedMaterials = new HashSet<string>();
+
         GtTexture ReadMainTexture(AssetsManager am, AssetsFileInstance inst, AssetTypeValueField smr, string dataDir, string path)
         {
             var preferred = new[] { "_MainTex", "_BaseMap", "_BaseColorMap", "_Albedo", "_MainTexture" };
@@ -236,7 +289,9 @@ namespace GorillaDrive
                 var mat = am.GetExtAsset(inst, matPtr);
                 if (mat.baseField == null) continue;
                 var pairs = mat.baseField["m_SavedProperties.m_TexEnvs.Array"].Children;
-                if (pass == 0) _log($"material '{mat.baseField["m_Name"].AsString}' textures: " + string.Join(", ", pairs.Select(p => p["first"].AsString).ToArray()));
+                var matName = mat.baseField["m_Name"].AsString;
+                if (pass == 0 && _loggedMaterials.Add(matName) && _loggedMaterials.Count <= 12)
+                    _log($"material '{matName}' textures: " + string.Join(", ", pairs.Select(p => p["first"].AsString).ToArray()));
                 foreach (var pair in pairs)
                 {
                     var name = pair["first"].AsString;
@@ -244,7 +299,7 @@ namespace GorillaDrive
                     if (pass == 1 && Regex.IsMatch(name, "normal|bump|mask|emission|occlusion|detail|metallic", RegexOptions.IgnoreCase)) continue;
                     if (pair["second.m_Texture.m_PathID"].AsLong == 0) continue;
                     var tex = am.GetExtAsset(mat.file, pair["second.m_Texture"]);
-                    if (tex.baseField == null) continue;
+                    if (tex.baseField == null || tex.info.TypeId != (int)AssetClassID.Texture2D) continue;
                     var t = ReadTexture(tex.baseField, dataDir, path);
                     if (t != null) { _log($"fur texture: {name} = {t.Name} ({t.Width}x{t.Height}, format {t.Format})"); return t; }
                 }

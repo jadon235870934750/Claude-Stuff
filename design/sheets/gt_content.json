@@ -18,7 +18,7 @@
       "used_for": "source of the body mesh, its bones (names + parents) and its material's main texture",
       "fallback_if_missing": "log 'GorillaDrive: gorilla rig not found' and keep the vanilla player (mod idles)",
       "code_struct": "GtRig",
-      "verified": "partly: first run picked cosmetic 'GorillaGloves' (bundle) because main files were unreadable; rule now excludes cosmetics and logs all candidates"
+      "verified": "yes: creator's log, 'gorilla' mesh 'gorilla' (3452 vertices, 39 bones) in level0, Unity 6000.2.9f1"
     },
     {
       "id": "gorilla_mesh",
@@ -32,11 +32,11 @@
     {
       "id": "gorilla_fur",
       "unity_class": "Texture2D",
-      "match_rule": "first material texture named _MainTex/_BaseMap/_BaseColorMap/_Albedo/_MainTexture, else first non-normal/mask texture; logs every material's texture names",
+      "match_rule": "rig material _MainTex/_BaseMap Texture2D; else Gorilla Tag fur materials gorilla/lightfur/darkfur/gorilla_body in the same file; else tint from _BaseColor/_Color",
       "used_for": "fur texture on body and hands",
       "fallback_if_missing": "flat brown material (#5a3a22) so the gorilla still shows",
       "code_struct": "GtTexture",
-      "verified": "unverified: supports RGBA32/ARGB32/RGB24/DXT1/DXT5/BC7 raw upload only"
+      "verified": "partly: rig material gorilla_body uses an atlas (no plain texture); fallback to material gorilla _MainTex untested"
     },
     {
       "id": "left_hand_part",

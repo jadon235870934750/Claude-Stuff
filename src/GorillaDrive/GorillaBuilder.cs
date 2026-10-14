@@ -27,12 +27,13 @@ namespace GorillaDrive
             return mesh;
         }
 
-        public static Material BuildMaterial(GtTexture fur, Action<string> log)
+        public static Material BuildMaterial(GtTexture fur, float[] tint, Action<string> log)
         {
             var shader = Shader.Find("Standard") ?? Shader.Find("Legacy Shaders/Diffuse") ?? Shader.Find("Unlit/Texture");
             var mat = new Material(shader) { name = "GT_fur", color = Color.white };
             var tex = BuildTexture(fur, log);
-            if (tex != null) mat.mainTexture = tex; else mat.color = FallbackFur;
+            if (tex != null) mat.mainTexture = tex;
+            else mat.color = tint != null ? new Color(tint[0], tint[1], tint[2]) : FallbackFur;
             return mat;
         }
 
