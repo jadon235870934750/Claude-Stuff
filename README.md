@@ -1,2 +1,2 @@
-# Claude-Stuff
+# Claude/AI-Stuff
 claude
